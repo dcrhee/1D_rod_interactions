@@ -12,12 +12,7 @@ Gets the phase plane starting off with an initial range of velocities and angles
 import numpy as np
 from scipy.integrate import odeint, solve_ivp, quad
 import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
-from matplotlib.animation import FFMpegWriter
-from matplotlib.patches import Arc, RegularPolygon
-from numpy import radians as rad
 from rotation_solver import * #all the functions used to solve the ode
-from plot_rot_simple import *
 
 def find_scaled_minhmin_S_prime(y):
     theta = abs(y[4,:]-y[5,:])
@@ -71,34 +66,3 @@ for thet_indx, theta in enumerate(thetas):
 np.save(pathname + 'thetas_gamma_' + str(gamma) + '.npy', thetas)
 np.save(pathname + 'vels_gamma_' + str(gamma) + '.npy', vels)
 np.save(pathname + 'events_gamma_' + str(gamma) + '.npy', events)   
-           
-fig, (ax1) = plt.subplots(figsize=(13, 3), ncols=1)
-pos = ax1.imshow(events, interpolation='none')
-
-# add the colorbar using the figure's method,
-# telling which mappable we're talking about and
-# which Axes object it should be near
-fig.colorbar(pos, ax=ax1)
-
-
-fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
-
-# Make data.
-Y = vels
-X = thetas
-X, Y = np.meshgrid(X, Y)
-Z = events
-
-surf = ax.plot_surface(X, Y, Z, cmap=cm.coolwarm,
-                       linewidth=0, antialiased=False)
-
-#ax.elev = 0
-#ax.azim = 270  # xz view
-
-#ax.elev = 0
-#ax.azim = 0    # yz view
-
-ax.elev = 90
-ax.azim = 0  # xy view
-
-test = np.load('v_' + str(vel) + '_theta_' + str(theta) + '.npy', allow_pickle=True)
